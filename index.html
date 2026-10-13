@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es-CR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Adora · Manicure, pedicure, cejas y pestañas</title>
+  <meta name="description" content="Adora: manicure (Builder Gel, Gel X, Luminary, Polygel), pedicure spa, cejas y pestañas en Costa Rica. Disfrutá tu bebida y snack favorito incluido en tu servicio. Reservá tu cita.">
+  <meta name="theme-color" content="#3E2521">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_CR">
+  <meta property="og:site_name" content="Adora">
+  <meta property="og:title" content="Adora · Una experiencia pensada con amor">
+  <meta property="og:description" content="Manicure, pedicure, cejas y pestañas. Elegí tu bebida y snack favorito incluido en tu servicio.">
+  <meta property="og:image" content="assets/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Italiana&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="preload" as="image" href="assets/img/fotos/dani-portada.jpg">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a href="#top" class="logo" aria-label="Adora, ir al inicio">Adora</a>
+
+      <nav class="nav" aria-label="Principal">
+        <ul class="nav-list">
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#destacados">Destacados</a></li>
+          <li><a href="#coffee">Coffee menu</a></li>
+          <li><a href="#experiencia">Experiencia</a></li>
+          <li><a href="#galeria">Galería</a></li>
+        </ul>
+      </nav>
+
+      <a class="btn btn-dark btn-sm header-cta" data-booking href="#reserva">Reservar cita</a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="menu-toggle-bars" aria-hidden="true"></span>
+        <span class="sr-only">Abrir menú</span>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobile-menu" hidden>
+      <div class="mobile-menu-panel scallop">
+        <p class="mobile-menu-kicker">menú</p>
+        <ul>
+          <li><a href="#servicios"><span>01</span>Servicios</a></li>
+          <li><a href="#destacados"><span>02</span>Destacados</a></li>
+          <li><a href="#coffee"><span>03</span>Coffee menu</a></li>
+          <li><a href="#experiencia"><span>04</span>Experiencia</a></li>
+          <li><a href="#galeria"><span>05</span>Galería</a></li>
+          <li><a href="#reserva"><span>06</span>Reserva</a></li>
+        </ul>
+        <a class="btn btn-pink btn-block" data-booking href="#reserva">Reservar mi cita</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ HERO (portada editorial con foto de Dani) ============ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <figure class="hero-photo" data-hero-photo>
+        <!-- La foto se define en data.js → hero.image. Este placeholder se ve si no carga. -->
+        <div class="ph ph-hero" role="img" aria-label="Espacio reservado para la foto de portada de Adora">
+          <span class="ph-label">Foto de portada<br><small>[subir assets/img/fotos/dani-portada.jpg]</small></span>
+        </div>
+      </figure>
+      <div class="hero-shade" aria-hidden="true"></div>
+
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow eyebrow-light">Nail &amp; beauty studio</p>
+          <h1 id="hero-title" class="hero-title">
+            <span class="sr-only">Adora — </span>Una experiencia pensada con amor<span class="heart" aria-hidden="true">♥</span>
+          </h1>
+          <p class="hero-lead">
+            Manicure, pedicure, cejas y pestañas. Tu bebida y snack favorito, incluidos en tu servicio.
+          </p>
+          <div class="hero-ctas">
+            <a class="btn-pill" data-booking href="#reserva">
+              <span>Reservar mi cita</span>
+              <span class="btn-pill-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </a>
+            <a class="btn btn-glass" href="#servicios">Ver servicios</a>
+          </div>
+        </div>
+        <p class="hero-signature" aria-hidden="true">Con amor: Dani</p>
+      </div>
+    </section>
+
+    <!-- ============ ACCESOS RÁPIDOS (chips de categorías) ============ -->
+    <nav class="quick container" aria-label="Categorías">
+      <ul class="quick-list">
+        <li><a class="quick-chip is-active" href="#servicios-manicure" data-goto-tab="manicure"><span class="quick-icon" data-icon="hand"></span><span>Manicure</span></a></li>
+        <li><a class="quick-chip" href="#servicios-pedicure" data-goto-tab="pedicure"><span class="quick-icon" data-icon="foot"></span><span>Pedicure</span></a></li>
+        <li><a class="quick-chip" href="#servicios-cejas" data-goto-tab="cejas"><span class="quick-icon" data-icon="eye"></span><span>Cejas y pestañas</span></a></li>
+        <li><a class="quick-chip" href="#coffee"><span class="quick-icon" data-icon="cup"></span><span>Coffee menu</span></a></li>
+      </ul>
+    </nav>
+
+    <!-- ============ DISEÑOS (fila tipo "Trending designs") ============ -->
+    <section class="trending container" aria-labelledby="trending-title">
+      <div class="row-head">
+        <h2 id="trending-title" class="row-title">Diseños Adora</h2>
+        <a class="row-link" href="#galeria">Ver todo <span aria-hidden="true">›</span></a>
+      </div>
+      <ul class="trend-list" data-trending></ul>
+    </section>
+
+    <!-- ============ SERVICIOS ============ -->
+    <section class="section services" id="servicios" aria-labelledby="services-title">
+      <div class="container">
+        <header class="section-head">
+          <p class="section-kicker">servicios</p>
+          <h2 id="services-title" class="display">Nuestro menú</h2>
+          <p class="section-lead">Elegí una categoría. Precios en colones, tal cual nuestro menú en el local.</p>
+        </header>
+
+        <div class="tabs" role="tablist" aria-label="Categorías de servicios" data-tabs></div>
+
+        <div class="menu-board scallop" data-board>
+          <div class="menu-board-head">
+            <p class="menu-board-kicker" data-board-kicker>servicios</p>
+            <h3 class="menu-board-title" data-board-title>Manicure</h3>
+            <hr class="menu-rule">
+          </div>
+          <div data-panels></div>
+        </div>
+        <noscript>
+          <p class="noscript">Para ver el catálogo interactivo activá JavaScript. También podés ver nuestros menús:</p>
+          <div class="noscript-menus">
+            <img src="assets/img/menus/menu-3.webp" alt="Menú de manicure de Adora" width="600" height="1067" loading="lazy">
+            <img src="assets/img/menus/menu-2.webp" alt="Menú de pedicure de Adora" width="600" height="1067" loading="lazy">
+            <img src="assets/img/menus/menu-1.webp" alt="Menú de cejas y pestañas de Adora" width="600" height="1067" loading="lazy">
+          </div>
+        </noscript>
+      </div>
+    </section>
+
+    <!-- ============ DESTACADOS ============ -->
+    <section class="section featured" id="destacados" aria-labelledby="featured-title">
+      <div class="container">
+        <header class="section-head section-head-split">
+          <div>
+            <p class="section-kicker">favoritos</p>
+            <h2 id="featured-title" class="display">Destacados</h2>
+          </div>
+          <p class="section-lead">Los servicios que más definen la experiencia Adora.</p>
+        </header>
+        <div class="featured-grid" data-featured></div>
+      </div>
+    </section>
+
+    <!-- ============ COFFEE MENU ============ -->
+    <section class="section coffee" id="coffee" aria-labelledby="coffee-title">
+      <div class="container">
+        <header class="coffee-head">
+          <p class="coffee-logo" aria-hidden="true">Adora</p>
+          <h2 id="coffee-title" class="coffee-title">Coffee menu</h2>
+        </header>
+
+        <ol class="coffee-grid" data-coffee></ol>
+
+        <div class="coffee-index" data-coffee-index></div>
+
+        <p class="coffee-note" data-coffee-note></p>
+        <p class="coffee-sign">Con amor: Dani</p>
+      </div>
+    </section>
+
+    <!-- ============ EXPERIENCIA ============ -->
+    <section class="section experience" id="experiencia" aria-labelledby="exp-title">
+      <div class="container experience-grid">
+        <header class="experience-head">
+          <p class="section-kicker">la experiencia</p>
+          <h2 id="exp-title" class="display display-light">Un rato<br><em>para vos</em></h2>
+          <p class="experience-quote">“Disfruta en cada una de tus citas una experiencia pensada con amor.”</p>
+        </header>
+        <ol class="experience-list">
+          <li>
+            <span class="exp-n">01</span>
+            <div>
+              <h3>Café o snack incluido</h3>
+              <p>Elegí tu bebida y snack favorito del coffee menu: está incluido en tu servicio.</p>
+            </div>
+          </li>
+          <li>
+            <span class="exp-n">02</span>
+            <div>
+              <h3>Manos, pies, cejas y pestañas</h3>
+              <p>Builder Gel, Gel X, Luminary, Polygel, pedicure spa, lifting de cejas y de pestañas en un solo lugar.</p>
+            </div>
+          </li>
+          <li>
+            <span class="exp-n">03</span>
+            <div>
+              <h3>Atención personalizada</h3>
+              <p>Cada cita se adapta a lo que buscás, del diseño más sencillo al más elaborado.</p>
+              <span class="todo">Texto provisional · revisar con Adora</span>
+            </div>
+          </li>
+          <li>
+            <span class="exp-n">04</span>
+            <div>
+              <h3>Un espacio para consentirte</h3>
+              <p>Un ambiente cuidado, pensado para que te tomés un momento para vos.</p>
+              <span class="todo">Texto provisional · revisar con Adora</span>
+            </div>
+          </li>
+          <li>
+            <span class="exp-n">05</span>
+            <div>
+              <h3>¿Venís de otro salón?</h3>
+              <p>Hacemos el retiro de producto de otro salón por ₡3.500.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ GALERÍA ============ -->
+    <section class="section gallery" id="galeria" aria-labelledby="gallery-title">
+      <div class="container">
+        <header class="section-head section-head-split">
+          <div>
+            <p class="section-kicker">galería</p>
+            <h2 id="gallery-title" class="display">Detalles Adora</h2>
+          </div>
+          <p class="section-lead">Resultados, espacio y pequeños detalles. <span class="todo">Fotos oficiales pendientes</span></p>
+        </header>
+        <div class="gallery-grid" data-gallery></div>
+      </div>
+    </section>
+
+    <!-- ============ RESERVA ============ -->
+    <section class="section booking" id="reserva" aria-labelledby="booking-title">
+      <div class="container">
+        <div class="booking-card scallop">
+          <p class="section-kicker section-kicker-pink">reservas</p>
+          <h2 id="booking-title" class="booking-title">Quiero mi cita</h2>
+          <p class="booking-lead">Escribinos para consultar disponibilidad y reservar tu servicio. Tu café o snack ya va incluido.</p>
+          <form class="planner" data-planner novalidate>
+            <fieldset>
+              <legend>Elegí tu servicio</legend>
+              <div class="pill-row pill-row-wrap" data-planner-cats></div>
+              <div class="pill-row pill-row-wrap" data-planner-services></div>
+            </fieldset>
+            <fieldset>
+              <legend>Día preferido</legend>
+              <div class="date-row" data-planner-dates></div>
+            </fieldset>
+            <fieldset>
+              <legend>Momento del día</legend>
+              <div class="pill-row" data-planner-times></div>
+              <p class="planner-hint">Te confirmamos la hora exacta según disponibilidad.</p>
+            </fieldset>
+            <p class="planner-summary" data-planner-summary aria-live="polite"></p>
+            <button class="btn-confirm" type="submit">
+              <span>Consultar disponibilidad</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </form>
+          <div class="booking-ctas">
+            <a class="btn btn-pink" data-booking href="#reserva">Reservar mi cita <span class="btn-arrow" aria-hidden="true">→</span></a>
+            <a class="btn btn-outline-light" data-link="whatsapp" href="#reserva">WhatsApp</a>
+            <a class="btn btn-outline-light" data-link="instagram" href="#reserva">Instagram</a>
+          </div>
+          <div class="booking-info">
+            <div>
+              <h3>Horario</h3>
+              <div data-hours></div>
+            </div>
+            <div>
+              <h3>Ubicación</h3>
+              <div data-location></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo logo-light" aria-label="Adora, volver arriba">Adora</a>
+        <p>Una experiencia pensada con amor.</p>
+      </div>
+      <div>
+        <h2 class="footer-h">Contacto</h2>
+        <ul class="footer-list" data-contact></ul>
+      </div>
+      <div>
+        <h2 class="footer-h">Horario</h2>
+        <div data-hours></div>
+      </div>
+      <div>
+        <h2 class="footer-h">Ubicación</h2>
+        <div data-location></div>
+        <h2 class="footer-h footer-h-gap">Políticas</h2>
+        <p data-policies></p>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span data-year></span> Adora. Precios en colones costarricenses (₡).</p>
+      <a href="#top">Volver arriba ↑</a>
+    </div>
+  </footer>
+
+  <!-- Toast para enlaces pendientes / errores -->
+  <div class="toast" role="status" aria-live="polite" data-toast hidden></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
