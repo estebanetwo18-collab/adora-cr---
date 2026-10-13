@@ -20,19 +20,21 @@ window.ADORA = {
     alt: "Dani, fundadora de Adora, junto al letrero ADORA en el local",
   },
 
-  /* Fila "Diseños Adora" (estilo trending). */
+  /* Fila "Diseños Adora" (estilo trending).
+     image = foto real de Adora; fallback = foto de relleno (Pexels) que se
+     muestra mientras la real no esté subida. */
   trending: [
-    { name: "Café 3D", image: "assets/img/fotos/unas-cafe-3d.jpg", alt: "Uñas stiletto en degradé café con relieve 3D hechas en Adora" },
-    { name: "Glitter nude", image: "assets/img/fotos/unas-glitter.jpg", alt: "Uñas stiletto nude con puntas de glitter iridiscente hechas en Adora" },
-    { name: "Polka cocoa", image: "assets/img/fotos/unas-polka.jpg", alt: "Uñas almendra con lunares en café y celeste hechas en Adora" },
-    { name: "Tu próximo diseño", image: null, alt: "" },
+    { name: "Café 3D", image: "assets/img/fotos/unas-cafe-3d.jpg", fallback: "assets/img/stock/manicure-nude.webp", alt: "Uñas stiletto en degradé café con relieve 3D hechas en Adora" },
+    { name: "Glitter nude", image: "assets/img/fotos/unas-glitter.jpg", fallback: "assets/img/stock/manicure-glitter.webp", alt: "Uñas stiletto nude con puntas de glitter iridiscente hechas en Adora" },
+    { name: "Polka cocoa", image: "assets/img/fotos/unas-polka.jpg", fallback: "assets/img/stock/manicure-perlas.webp", alt: "Uñas almendra con lunares en café y celeste hechas en Adora" },
+    { name: "Nude clásico", image: "assets/img/stock/manos-nude.webp", alt: "Manos con manicure nude (foto de referencia)" },
   ],
 
   /* Selector de reserva: momentos del día (NO son horarios confirmados). */
   bookingTimes: ["Mañana", "Mediodía", "Tarde"],
 
   business: {
-    name: "Adora",
+    name: "Adora Nail Salon",
     tagline: "Una experiencia pensada con amor",
     signature: "Con amor: Dani",
     country: "Costa Rica",
@@ -42,7 +44,9 @@ window.ADORA = {
     phone: "+506 7295 3736",
     email: null,             // [CONFIRMAR CON ADORA]
     // Horarios: array de { days, hours }. Vacío = se muestra "[CONFIRMAR CON ADORA]".
-    hours: [],
+    // Fuente: vinil exterior oficial de Adora (los días no se indican).
+    hours: [{ days: "Horario de atención", hours: "9:00 a.m. – 6:00 p.m." }],
+    hoursNote: "Reservá tu cita con anticipación.",
     policies: null,          // [CONFIRMAR CON ADORA] ej. políticas de cancelación / adelanto
   },
 
@@ -52,9 +56,10 @@ window.ADORA = {
     // Número de WhatsApp SOLO dígitos con código de país, ej. "50688888888".
     // Si existe, cada botón "Reservar" abre WhatsApp con el servicio ya escrito.
     whatsapp: "50672953736", // +506 7295 3736 (confirmado por Adora)
-    instagram: "",           // [CONFIRMAR CON ADORA] ej. "https://www.instagram.com/usuario"
+    instagram: "https://www.instagram.com/adoranails.cr/", // @adoranails.cr (vinil oficial)
     facebook: "",
-    tiktok: "",
+    tiktok: "https://www.tiktok.com/@adoranails.cr",       // @adoranails.cr (vinil oficial)
+    handle: "@adoranails.cr",
   },
 
   categories: [
@@ -106,11 +111,11 @@ window.ADORA = {
   /* Sección "Destacados". `services` referencia ids de arriba: el precio
      se calcula solo (muestra "desde" el menor). */
   featured: [
-    { id: "luminary", title: "Luminary", kicker: "Manicure", text: "Tres niveles de diseño, del más sencillo al más elaborado.", services: ["luminary-sencillo", "luminary-basico", "luminary-elaborado"], image: "assets/img/fotos/unas-polka.jpg", alt: "Uñas almendra con lunares en café y celeste hechas en Adora", tone: "pink" },
-    { id: "lifting-pestanas", title: "Lifting de pestañas", kicker: "Pestañas", text: "Clásico o con técnica coreana.", services: ["lifting-pestanas", "lifting-pestanas-coreano"], image: null, tone: "choc" },
-    { id: "jelly-spa", title: "Jelly Spa", kicker: "Pedicure", text: "Pedicure spa con baño de gelatina.", services: ["jelly-spa"], image: null, tone: "cream" },
-    { id: "elaborados", title: "Diseños elaborados", kicker: "Nail art", text: "En Builder Gel, Gel X o Luminary.", services: ["builder-elaborado", "gelx-elaborado", "luminary-elaborado"], image: "assets/img/fotos/unas-cafe-3d.jpg", alt: "Uñas stiletto en degradé café con relieve 3D hechas en Adora", tone: "choc" },
-    { id: "manicure-spa", title: "Manicure Spa", kicker: "Manicure", text: "Un momento para tus manos.", services: ["manicure-spa"], image: null, tone: "pink" },
+    { id: "luminary", title: "Luminary", kicker: "Manicure", text: "Tres niveles de diseño, del más sencillo al más elaborado.", services: ["luminary-sencillo", "luminary-basico", "luminary-elaborado"], image: "assets/img/fotos/unas-polka.jpg", alt: "Uñas almendra con lunares en café y celeste hechas en Adora", fallback: "assets/img/stock/manicure-nude.webp", tone: "pink" },
+    { id: "lifting-pestanas", title: "Lifting de pestañas", kicker: "Pestañas", text: "Clásico o con técnica coreana.", services: ["lifting-pestanas", "lifting-pestanas-coreano"], image: "assets/img/stock/pestanas.webp", tone: "choc" },
+    { id: "jelly-spa", title: "Jelly Spa", kicker: "Pedicure", text: "Pedicure spa con baño de gelatina.", services: ["jelly-spa"], image: "assets/img/stock/pedicure.webp", tone: "cream" },
+    { id: "elaborados", title: "Diseños elaborados", kicker: "Nail art", text: "En Builder Gel, Gel X o Luminary.", services: ["builder-elaborado", "gelx-elaborado", "luminary-elaborado"], image: "assets/img/fotos/unas-cafe-3d.jpg", alt: "Uñas stiletto en degradé café con relieve 3D hechas en Adora", fallback: "assets/img/stock/manicure-glitter.webp", tone: "choc" },
+    { id: "manicure-spa", title: "Manicure Spa", kicker: "Manicure", text: "Un momento para tus manos.", services: ["manicure-spa"], image: "assets/img/stock/manos-nude.webp", tone: "pink" },
   ],
 
   /* Coffee menu — misma numeración del menú oficial. */
@@ -133,16 +138,16 @@ window.ADORA = {
   /* Galería. image: null = placeholder para reemplazar con fotos oficiales.
      size: "tall" | "wide" | "big" | "" (controla la composición asimétrica). */
   gallery: [
-    { label: "Manicure", alt: "Uñas stiletto nude con puntas de glitter iridiscente hechas en Adora", image: "assets/img/fotos/unas-glitter.jpg", size: "tall" },
+    { label: "Manicure", alt: "Uñas stiletto nude con puntas de glitter hechas en Adora", image: "assets/img/fotos/unas-glitter.jpg", fallback: "assets/img/stock/manicure-glitter.webp", size: "tall" },
     { label: "Coffee menu", alt: "Matcha latte del coffee menu de Adora", image: "assets/img/coffee/06.webp", size: "", cream: true },
-    { label: "Pestañas", alt: "Lifting de pestañas en Adora", image: null, size: "" },
+    { label: "Pestañas", alt: "Pestañas con lifting (foto de referencia)", image: "assets/img/stock/pestanas.webp", size: "" },
     { label: "Menú de manicure", alt: "Menú oficial de servicios de manicure de Adora", image: "assets/img/menus/menu-3.webp", size: "tall", contain: true },
-    { label: "Diseño elaborado", alt: "Uñas stiletto en degradé café con relieve 3D hechas en Adora", image: "assets/img/fotos/unas-cafe-3d.jpg", size: "wide" },
-    { label: "Ambiente del espacio", alt: "Dani junto al letrero ADORA en el local", image: "assets/img/fotos/dani-portada.jpg", size: "" },
-    { label: "Cejas", alt: "Diseño de cejas en Adora", image: null, size: "" },
-    { label: "Pedicure", alt: "Pedicure en Adora", image: null, size: "" },
-    { label: "Detalles y productos", alt: "Productos utilizados en Adora", image: null, size: "" },
-    { label: "Snacks", alt: "Galleta del coffee menu de Adora", image: "assets/img/coffee/08.webp", size: "wide", cream: true },
-    { label: "Nail art", alt: "Uñas almendra con lunares en café y celeste hechas en Adora", image: "assets/img/fotos/unas-polka.jpg", size: "wide" },
+    { label: "Diseño elaborado", alt: "Uñas stiletto en degradé café con relieve 3D hechas en Adora", image: "assets/img/fotos/unas-cafe-3d.jpg", fallback: "assets/img/stock/manicure-nude.webp", size: "wide" },
+    { label: "Ambiente del espacio", alt: "Dani junto al letrero ADORA en el local", image: "assets/img/fotos/dani-portada.jpg", fallback: "assets/img/stock/ambiente.webp", size: "" },
+    { label: "Cejas", alt: "Diseño de cejas (foto de referencia)", image: "assets/img/stock/cejas.webp", size: "tall" },
+    { label: "Pedicure", alt: "Pedicure (foto de referencia)", image: "assets/img/stock/pedicure.webp", size: "" },
+    { label: "Detalles y productos", alt: "Esmalte en gel y manicure (foto de referencia)", image: "assets/img/stock/productos.webp", size: "" },
+    { label: "Snacks", alt: "Galleta del coffee menu de Adora", image: "assets/img/coffee/08.webp", size: "", cream: true },
+    { label: "Nail art", alt: "Uñas almendra con lunares en café y celeste hechas en Adora", image: "assets/img/fotos/unas-polka.jpg", fallback: "assets/img/stock/manicure-perlas.webp", size: "wide" },
   ],
 };

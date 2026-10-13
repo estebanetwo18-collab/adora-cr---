@@ -109,6 +109,12 @@
       var box = img.closest(".media");
       function done() { box.classList.remove("is-loading"); box.classList.add("is-loaded"); }
       function fail() {
+        var fb = box.getAttribute("data-fallback");
+        if (fb && img.getAttribute("src") !== fb) {
+          box.removeAttribute("data-fallback");
+          img.src = fb;
+          return;
+        }
         box.classList.remove("is-loading");
         box.classList.add("is-error");
         box.innerHTML = placeholderHTML(box.getAttribute("data-label") || "Imagen no disponible", box.hasAttribute("data-compact"));
@@ -116,14 +122,16 @@
       if (img.complete && img.naturalWidth) return done();
       if (img.complete && !img.naturalWidth && img.src) return fail();
       box.classList.add("is-loading");
-      img.addEventListener("load", done, { once: true });
-      img.addEventListener("error", fail, { once: true });
+      img.addEventListener("load", done);
+      img.addEventListener("error", fail);
     });
   }
 
-  function media(src, alt, label, cls, compact) {
-    return '<div class="media ' + (cls || "") + '" data-label="' + esc(label) + '"' + (compact ? " data-compact" : "") + ">" +
-      (src ? imgHTML(src, alt) : placeholderHTML(label, compact)) + "</div>";
+  // fallback: foto de relleno que se usa si la foto real todavía no existe
+  function media(src, alt, label, cls, compact, fallback) {
+    return '<div class="media ' + (cls || "") + '" data-label="' + esc(label) + '"' + (compact ? " data-compact" : "") +
+      (fallback ? ' data-fallback="' + esc(fallback) + '"' : "") + ">" +
+      (src || fallback ? imgHTML(src || fallback, alt) : placeholderHTML(label, compact)) + "</div>";
   }
 
   /* ---------- HERO ---------- */
@@ -265,7 +273,7 @@
       var many = items.length > 1;
       var first = items[0] ? items[0].name : f.title;
       return '<article class="feat feat-' + (f.tone || "cream") + " feat-" + (i + 1) + ' reveal" style="--i:' + i + '">' +
-        media(f.image, f.alt || f.title, f.title, "feat-media") +
+        media(f.image, f.alt || f.title, f.title, "feat-media", false, f.fallback) +
         '<div class="feat-body">' +
           '<p class="feat-kicker"><span>' + pad(i + 1) + "</span> " + esc(f.kicker) + "</p>" +
           '<h3 class="feat-title">' + esc(f.title) + "</h3>" +
@@ -318,7 +326,7 @@
     if (!el) return;
     el.innerHTML = D.gallery.map(function (g, i) {
       return '<figure class="g-item ' + (g.size ? "g-" + g.size : "") + (g.cream ? " g-cream" : "") + (g.contain ? " g-contain" : "") + ' reveal" style="--i:' + (i % 4) + '">' +
-        media(g.image, g.alt, g.label, "g-media", true) +
+        media(g.image, g.alt, g.label, "g-media", true, g.fallback) +
         '<figcaption>' + esc(g.label) + "</figcaption></figure>";
     }).join("");
   }
@@ -342,7 +350,7 @@
     try { saved = JSON.parse(localStorage.getItem("adora-favs") || "{}"); } catch (e) { saved = {}; }
     el.innerHTML = D.trending.map(function (t, i) {
       return '<li class="trend reveal" style="--i:' + i + '">' +
-        media(t.image, t.alt || t.name, t.name, "trend-media", true) +
+        media(t.image, t.alt || t.name, t.name, "trend-media", true, t.fallback) +
         '<div class="trend-foot"><span class="trend-name">' + esc(t.name) + "</span>" +
         '<button class="fav" type="button" aria-pressed="' + !!saved[t.name] + '" aria-label="Guardar ' + esc(t.name) + ' en favoritos" data-fav="' + esc(t.name) + '">' + ICONS.heart + "</button></div></li>";
     }).join("");
@@ -442,6 +450,7 @@
     var hoursHTML = b.hours && b.hours.length
       ? '<dl class="hours">' + b.hours.map(function (h) { return "<div><dt>" + esc(h.days) + "</dt><dd>" + esc(h.hours) + "</dd></div>"; }).join("") + "</dl>"
       : '<p class="pending">' + PENDING + "</p>";
+    if (b.hoursNote) hoursHTML += '<p class="hours-note">' + esc(b.hoursNote) + "</p>";
     $$("[data-hours]").forEach(function (el) { el.innerHTML = hoursHTML; });
 
     var loc = b.address
@@ -455,12 +464,12 @@
     var contact = $("[data-contact]");
     if (contact) {
       var rows = [];
-      rows.push(isUrl(l.instagram) ? '<li><a class="link" href="' + esc(l.instagram) + '" target="_blank" rel="noopener">Instagram ↗</a></li>' : '<li>Instagram <span class="pending">' + PENDING + "</span></li>");
+      var handle = l.handle ? " " + esc(l.handle) : "";
+      rows.push(isUrl(l.instagram) ? '<li><a class="link" href="' + esc(l.instagram) + '" target="_blank" rel="noopener">Instagram' + handle + " ↗</a></li>" : '<li>Instagram <span class="pending">' + PENDING + "</span></li>");
       var wa = (l.whatsapp || "").replace(/\D/g, "");
-      rows.push(wa ? '<li><a class="link" href="https://wa.me/' + wa + '" target="_blank" rel="noopener">WhatsApp ↗</a></li>' : '<li>WhatsApp <span class="pending">' + PENDING + "</span></li>");
+      rows.push(wa ? '<li><a class="link" href="https://wa.me/' + wa + '" target="_blank" rel="noopener">WhatsApp ' + esc(b.phone || "") + " ↗</a></li>" : '<li>WhatsApp <span class="pending">' + PENDING + "</span></li>");
       if (isUrl(l.facebook)) rows.push('<li><a class="link" href="' + esc(l.facebook) + '" target="_blank" rel="noopener">Facebook ↗</a></li>');
-      if (isUrl(l.tiktok)) rows.push('<li><a class="link" href="' + esc(l.tiktok) + '" target="_blank" rel="noopener">TikTok ↗</a></li>');
-      rows.push(b.phone ? '<li><a class="link" href="tel:' + esc(b.phone.replace(/\s/g, "")) + '">' + esc(b.phone) + "</a></li>" : "");
+      if (isUrl(l.tiktok)) rows.push('<li><a class="link" href="' + esc(l.tiktok) + '" target="_blank" rel="noopener">TikTok' + handle + " ↗</a></li>");
       rows.push(b.email ? '<li><a class="link" href="mailto:' + esc(b.email) + '">' + esc(b.email) + "</a></li>" : "");
       contact.innerHTML = rows.join("");
     }
