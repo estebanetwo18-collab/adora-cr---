@@ -127,7 +127,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 
 /* Botón ancho oscuro (como "Confirm Booking") */
 .btn-confirm {
-  display: flex; align-items: center; justify-content: center; gap: .8rem; width: 100%;
+  display: flex; text-decoration: none; align-items: center; justify-content: center; gap: .8rem; width: 100%;
   min-height: 60px; padding: 1rem 1.5rem; border: 0; border-radius: 999px;
   background: var(--pink); color: var(--choc-deep);
   font: 600 1.08rem/1 var(--sans); cursor: pointer;
@@ -143,7 +143,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 
 /* ---------- header ---------- */
 .site-header {
-  position: fixed; inset: 0 0 auto; z-index: 50; height: var(--header-h);
+  position: fixed; inset: 0 0 auto; z-index: 50; height: calc(var(--header-h) + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px);
   color: var(--white);
   transition: background-color .3s, color .3s, box-shadow .3s;
 }
@@ -529,7 +529,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .toast.is-visible { transform: translate(-50%, 0); opacity: 1; }
 
 /* ---------- reveal ---------- */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); transition-delay: calc(var(--i, 0) * 70ms); }
+.reveal { transform: translateY(18px); transition: transform .7s var(--ease); transition-delay: calc(var(--i, 0) * 70ms); }
 .reveal.is-in { opacity: 1; transform: none; }
 .cup.reveal .cup-n { opacity: 0; transform: translateY(10px); transition: opacity .6s .25s, transform .6s .25s var(--ease); }
 .cup.reveal.is-in .cup-n { opacity: 1; transform: none; }

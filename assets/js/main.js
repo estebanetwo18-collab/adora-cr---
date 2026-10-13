@@ -403,7 +403,12 @@
       if (state.time) parts.push(state.time.toLowerCase());
       return parts.join(" · ");
     }
-    function update() { summary.textContent = text() ? "Tu selección: " + text() : ""; }
+    var go = $("[data-planner-go]", form);
+    function update() {
+      summary.textContent = text() ? "Tu selección: " + text() : "";
+      var href = bookingHref(text());
+      if (href) go.setAttribute("href", href);
+    }
 
     form.addEventListener("click", function (e) {
       var b = e.target.closest(".pill");
@@ -416,13 +421,18 @@
       }
       update();
     });
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (!state.service) { showToast("Elegí un servicio para continuar."); svcEl.querySelector(".pill").focus(); return; }
-      var href = bookingHref(text());
-      if (href) window.open(href, "_blank", "noopener");
-      else showToast("Enlace de reserva pendiente " + BOOKING_PENDING);
-    });
+    function guard(e) {
+      if (!state.service) {
+        e.preventDefault();
+        showToast("Elegí un servicio para continuar.");
+        svcEl.querySelector(".pill").focus();
+      } else if (!bookingHref(text())) {
+        e.preventDefault();
+        showToast("Enlace de reserva pendiente " + BOOKING_PENDING);
+      }
+    }
+    go.addEventListener("click", guard);
+    form.addEventListener("submit", function (e) { e.preventDefault(); });
     renderCats(); renderServices(); renderDates(); renderTimes(); update();
   }
 
