@@ -22,7 +22,7 @@ Todo se edita en **`assets/js/data.js`**:
 
 - **Precios / servicios**: en `services`, cambiá `price` (número sin puntos, ej. `18000`), `name` o `description`. Para agregar uno, copiá una línea y cambiá el `id`.
 - **Duración**: `duration: "60 min"`. Si queda en `null` se muestra "Duración por confirmar".
-- **Fotos**: subí la imagen a `assets/img/fotos/` y poné la ruta en `image`. Si una foto falta o falla, se ve un placeholder elegante.
+- **Fotos**: subí la imagen a `assets/img/fotos/` y poné la ruta en `image` (donde hoy dice `image: null`). Mientras tanto se usa la foto de relleno de `fallback`.
 - **Reserva**: `links.whatsapp` (solo dígitos con código de país). Cada botón "Reservar" abre WhatsApp con el servicio ya escrito.
 - **Redes, horarios y dirección**: `links.instagram`, `business.hours` (`[{ days: "Lun–Vie", hours: "9:00–18:00" }]`), `business.address`, `business.mapsUrl`.
 - **Destacados**: en `featured`, cada tarjeta referencia ids de servicios y calcula los precios sola.
@@ -45,14 +45,14 @@ Versión de un solo archivo para otros hostings: `python3 scripts/build-single.p
 
 | Archivo | Estado | Uso |
 |---|---|---|
-| `assets/img/fotos/dani-portada.jpg` | ✅ subida | Portada y "Ambiente" |
+| `assets/img/fotos/dani-portada.webp` | ✅ subida | Portada y "Ambiente" |
 | `assets/img/fotos/unas-cafe-3d.jpg` | pendiente | Diseños, destacados, galería |
 | `assets/img/fotos/unas-glitter.jpg` | pendiente | Diseños, galería |
 | `assets/img/fotos/unas-polka.jpg` | pendiente | Diseños, destacados, galería |
 
 Mientras una foto real no esté subida, se muestra una **foto de relleno** de
 `assets/img/stock/` (Pexels, licencia libre: uso gratis, sin atribución obligatoria).
-Al subir la foto real con el nombre exacto, reemplaza sola a la de relleno.
+Al subir la foto real, poné su ruta en `assets/js/data.js` (los lugares están marcados con `subir assets/img/fotos/...`).
 
 Fotos de relleno usadas (Pexels): 35491156, 17280274, 6941115, 20363675, 29588096,
 21412169, 7755244, 35103938, 34941685 — `https://www.pexels.com/photo/<id>/`.

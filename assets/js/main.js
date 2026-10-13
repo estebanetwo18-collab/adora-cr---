@@ -112,6 +112,7 @@
         var fb = box.getAttribute("data-fallback");
         if (fb && img.getAttribute("src") !== fb) {
           box.removeAttribute("data-fallback");
+          img.alt = refAlt(box.getAttribute("data-label") || "");
           img.src = fb;
           return;
         }
@@ -127,11 +128,14 @@
     });
   }
 
+  // Texto alternativo honesto para fotos de relleno
+  function refAlt(label) { return label + " (foto de referencia)"; }
+
   // fallback: foto de relleno que se usa si la foto real todavía no existe
   function media(src, alt, label, cls, compact, fallback) {
     return '<div class="media ' + (cls || "") + '" data-label="' + esc(label) + '"' + (compact ? " data-compact" : "") +
       (fallback ? ' data-fallback="' + esc(fallback) + '"' : "") + ">" +
-      (src || fallback ? imgHTML(src || fallback, alt) : placeholderHTML(label, compact)) + "</div>";
+      (src ? imgHTML(src, alt) : fallback ? imgHTML(fallback, refAlt(label)) : placeholderHTML(label, compact)) + "</div>";
   }
 
   /* ---------- HERO ---------- */
@@ -142,6 +146,7 @@
     img.alt = D.hero.alt || "Adora";
     img.className = "hero-img";
     img.decoding = "async";
+    img.fetchPriority = "high";
     img.onload = function () {
       fig.innerHTML = "";
       fig.appendChild(img);
@@ -229,6 +234,7 @@
         $("#panel-" + D.categories[j].id).hidden = !on;
       });
       boardTitle.textContent = c.label;
+      $$("[data-goto-tab]").forEach(function (q) { q.classList.toggle("is-active", q.getAttribute("data-goto-tab") === c.id); });
       boardKicker.textContent = c.kicker || "servicios";
       var panel = $("#panel-" + c.id);
       panel.classList.remove("is-entering");
@@ -254,12 +260,6 @@
       if (at > -1) select(at);
     };
 
-    // Permitir enlaces directos: #servicios-pedicure
-    var m = location.hash.match(/^#servicios-(.+)$/);
-    if (m) {
-      var at = D.categories.map(function (c) { return c.id; }).indexOf(m[1]);
-      if (at > -1) select(at);
-    }
   }
 
   /* ---------- DESTACADOS ---------- */
@@ -334,12 +334,6 @@
   /* ---------- ACCESOS RÁPIDOS ---------- */
   function buildQuick() {
     $$("[data-icon]").forEach(function (el) { el.innerHTML = ICONS[el.getAttribute("data-icon")] || ""; });
-    $$("[data-goto-tab]").forEach(function (a) {
-      a.addEventListener("click", function () {
-        selectTab(a.getAttribute("data-goto-tab"));
-        $$(".quick-chip").forEach(function (o) { o.classList.toggle("is-active", o === a); });
-      });
-    });
   }
 
   /* ---------- DISEÑOS (trending) ---------- */
@@ -448,7 +442,11 @@
   function buildInfo() {
     var b = D.business, l = D.links;
     var hoursHTML = b.hours && b.hours.length
-      ? '<dl class="hours">' + b.hours.map(function (h) { return "<div><dt>" + esc(h.days) + "</dt><dd>" + esc(h.hours) + "</dd></div>"; }).join("") + "</dl>"
+      ? '<dl class="hours">' + b.hours.map(function (h) {
+          return h.days
+            ? "<div><dt>" + esc(h.days) + "</dt><dd>" + esc(h.hours) + "</dd></div>"
+            : '<div><dt class="sr-only">Horario</dt><dd class="hours-main">' + esc(h.hours) + "</dd></div>";
+        }).join("") + "</dl>"
       : '<p class="pending">' + PENDING + "</p>";
     if (b.hoursNote) hoursHTML += '<p class="hours-note">' + esc(b.hoursNote) + "</p>";
     $$("[data-hours]").forEach(function (el) { el.innerHTML = hoursHTML; });
@@ -520,33 +518,125 @@
     document.head.appendChild(s);
   }
 
+  /* ---------- Navegación interna (scroll suave + tabs por hash) ---------- */
+  // Acepta "#seccion", "#top" y "#servicios-<categoria>" (abre ese tab).
+  function goTo(hash) {
+    var m = hash.match(/^#servicios-(.+)$/);
+    var id = m ? "servicios" : hash.slice(1);
+    var target = id === "top" ? null : document.getElementById(id);
+    if (id !== "top" && !target) return false;
+    if (m) selectTab(m[1]);
+    var behavior = reduceMotion ? "auto" : "smooth";
+    if (target) target.scrollIntoView({ behavior: behavior, block: "start" });
+    else window.scrollTo({ top: 0, behavior: behavior });
+    try { history.pushState(null, "", hash); } catch (e) { /* file:// o sandbox */ }
+    // Mover el foco al destino para teclado y lectores de pantalla
+    var focusEl = target || $(".logo");
+    if (target && !target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+    if (focusEl) focusEl.focus({ preventScroll: true });
+    return true;
+  }
+
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a || a.hasAttribute("data-pending") || e.defaultPrevented) return;
+    var hash = a.getAttribute("href");
+    if (hash === "#" || hash === "#main") return;
+    if (a.closest("#mobile-menu")) return; // lo maneja el menú
+    if (goTo(hash)) e.preventDefault();
+  });
+
   /* ---------- Menú móvil ---------- */
   function mobileMenu() {
     var btn = $(".menu-toggle");
     var menu = $("#mobile-menu");
     if (!btn || !menu) return;
     var label = $(".sr-only", btn);
-    function set(open) {
-      btn.setAttribute("aria-expanded", open);
-      label.textContent = open ? "Cerrar menú" : "Abrir menú";
-      document.body.classList.toggle("menu-open", open);
-      if (open) {
-        menu.hidden = false;
-        requestAnimationFrame(function () { menu.classList.add("is-open"); });
-        var first = $("a", menu); if (first) first.focus();
-      } else {
-        menu.classList.remove("is-open");
-        setTimeout(function () { if (!menu.classList.contains("is-open")) menu.hidden = true; }, reduceMotion ? 0 : 280);
-      }
+    var page = [$("main"), $(".site-footer")].filter(Boolean);
+    var html = document.documentElement;
+    var body = document.body;
+    var lockedY = 0;
+    var closeTimer;
+
+    function isOpen() { return btn.getAttribute("aria-expanded") === "true"; }
+
+    // Bloqueo de scroll que también funciona en iOS Safari
+    function lock() {
+      lockedY = window.scrollY;
+      var bar = window.innerWidth - html.clientWidth;
+      body.style.position = "fixed";
+      body.style.top = -lockedY + "px";
+      body.style.left = "0";
+      body.style.right = "0";
+      body.style.width = "100%";
+      if (bar > 0) body.style.paddingRight = bar + "px";
     }
-    btn.addEventListener("click", function () { set(btn.getAttribute("aria-expanded") !== "true"); });
+    function unlock() {
+      body.style.position = body.style.top = body.style.left = body.style.right = body.style.width = body.style.paddingRight = "";
+      html.style.scrollBehavior = "auto";
+      window.scrollTo(0, lockedY);
+      html.style.scrollBehavior = "";
+    }
+
+    function open() {
+      if (isOpen()) return;
+      clearTimeout(closeTimer);
+      btn.setAttribute("aria-expanded", "true");
+      label.textContent = "Cerrar menú";
+      lock();
+      body.classList.add("menu-open");
+      page.forEach(function (el) { el.setAttribute("inert", ""); el.setAttribute("aria-hidden", "true"); });
+      menu.hidden = false;
+      menu.scrollTop = 0;
+      requestAnimationFrame(function () { menu.classList.add("is-open"); });
+      var first = $("a", menu);
+      if (first) first.focus({ preventScroll: true });
+    }
+    function close(returnFocus) {
+      if (!isOpen()) return;
+      btn.setAttribute("aria-expanded", "false");
+      label.textContent = "Abrir menú";
+      body.classList.remove("menu-open");
+      page.forEach(function (el) { el.removeAttribute("inert"); el.removeAttribute("aria-hidden"); });
+      unlock();
+      menu.classList.remove("is-open");
+      closeTimer = setTimeout(function () { menu.hidden = true; }, reduceMotion ? 0 : 230);
+      if (returnFocus) btn.focus({ preventScroll: true });
+    }
+
+    btn.addEventListener("click", function () { isOpen() ? close(true) : open(); });
+
     menu.addEventListener("click", function (e) {
-      if (e.target === menu || e.target.closest("a")) set(false);
+      // Tocar el fondo oscuro (fuera del panel) cierra
+      if (!e.target.closest(".mobile-menu-panel")) { close(true); return; }
+      var a = e.target.closest("a");
+      if (!a) return;
+      var hash = a.getAttribute("href");
+      if (a.hasAttribute("data-booking") || a.hasAttribute("data-pending") || !hash || hash.charAt(0) !== "#") {
+        close(false); // enlaces externos (WhatsApp): se abren y el menú se cierra
+        return;
+      }
+      e.preventDefault();
+      close(false);
+      goTo(hash);
     });
+
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") { set(false); btn.focus(); }
+      if (!isOpen()) return;
+      if (e.key === "Escape") { e.preventDefault(); close(true); return; }
+      if (e.key === "Tab") {
+        // Mantener el foco dentro del menú (y el botón de cerrar)
+        var items = [btn].concat($$("a, button", menu));
+        var i = items.indexOf(document.activeElement);
+        if (e.shiftKey && (i <= 0)) { e.preventDefault(); items[items.length - 1].focus(); }
+        else if (!e.shiftKey && i === items.length - 1) { e.preventDefault(); items[0].focus(); }
+      }
     });
-    window.matchMedia("(min-width: 960px)").addEventListener("change", function (m) { if (m.matches) set(false); });
+
+    var desktop = window.matchMedia("(min-width: 960px)");
+    var onChange = function (m) { if (m.matches) close(false); };
+    if (desktop.addEventListener) desktop.addEventListener("change", onChange);
+    else if (desktop.addListener) desktop.addListener(onChange);
   }
 
   /* ---------- Header con sombra al hacer scroll ---------- */
@@ -596,4 +686,10 @@
   mobileMenu();
   headerScroll();
   reveals();
+
+  // Enlace directo a un tab (ej. compartir .../#servicios-pedicure)
+  if (/^#servicios-/.test(location.hash)) {
+    var initialHash = location.hash;
+    window.addEventListener("load", function () { goTo(initialHash); });
+  }
 })();

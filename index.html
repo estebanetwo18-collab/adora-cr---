@@ -21,9 +21,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Italiana&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Italiana&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
-  <link rel="preload" as="image" href="assets/img/fotos/dani-portada.jpg">
+  <link rel="preload" as="image" href="assets/img/fotos/dani-portada.webp" fetchpriority="high">
 </head>
 <body>
   <a class="skip-link" href="#main">Saltar al contenido</a>
@@ -58,21 +58,30 @@
       </button>
     </div>
 
-    <div class="mobile-menu" id="mobile-menu" hidden>
-      <div class="mobile-menu-panel scallop">
-        <p class="mobile-menu-kicker">menú</p>
-        <ul>
-          <li><a href="#servicios"><span>01</span>Servicios</a></li>
-          <li><a href="#destacados"><span>02</span>Destacados</a></li>
-          <li><a href="#coffee"><span>03</span>Coffee menu</a></li>
-          <li><a href="#experiencia"><span>04</span>Experiencia</a></li>
-          <li><a href="#galeria"><span>05</span>Galería</a></li>
-          <li><a href="#reserva"><span>06</span>Reserva</a></li>
-        </ul>
-        <a class="btn btn-pink btn-block" data-booking href="#reserva">Reservar mi cita</a>
-      </div>
-    </div>
   </header>
+
+  <!-- Menú móvil: fuera del header para que ningún efecto del header lo recorte -->
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav class="mobile-menu-panel scallop" aria-label="Menú">
+      <ul class="mm-list">
+        <li><a href="#top">Inicio</a></li>
+        <li>
+          <a href="#servicios">Servicios</a>
+          <ul class="mm-sub" aria-label="Categorías de servicios">
+            <li><a href="#servicios-manicure">Manicure</a></li>
+            <li><a href="#servicios-pedicure">Pedicure</a></li>
+            <li><a href="#servicios-cejas">Cejas y pestañas</a></li>
+          </ul>
+        </li>
+        <li><a href="#destacados">Destacados</a></li>
+        <li><a href="#coffee">Coffee menu</a></li>
+        <li><a href="#experiencia">Experiencia</a></li>
+        <li><a href="#galeria">Galería</a></li>
+        <li><a href="#reserva">Reserva</a></li>
+      </ul>
+      <a class="btn btn-pink btn-block" data-booking href="#reserva">Reservar mi cita</a>
+    </nav>
+  </div>
 
   <main id="main">
     <!-- ============ HERO (portada editorial con foto de Dani) ============ -->
@@ -276,7 +285,7 @@
             </fieldset>
             <fieldset>
               <legend>Momento del día</legend>
-              <div class="pill-row" data-planner-times></div>
+              <div class="pill-row pill-row-wrap" data-planner-times></div>
               <p class="planner-hint">Te confirmamos la hora exacta según disponibilidad.</p>
             </fieldset>
             <p class="planner-summary" data-planner-summary aria-live="polite"></p>
